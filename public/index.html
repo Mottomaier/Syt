@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Einkaufsliste</title>
+    <meta charset="UTF-8"/>
+    
+</head>
+<body>
+	
+	
+	
+	
+	
+	
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<script language = "javascript" type="text/javascript">
+	  // Initialize Firebase
+	  var config = {
+		apiKey: "AIzaSyCOzBAP0fMC7LT8S8H2M9QQqqYx83DURwI",
+		authDomain: "einkaufsliste-e6aa8.firebaseapp.com",
+		databaseURL: "https://einkaufsliste-e6aa8.firebaseio.com",
+		projectId: "einkaufsliste-e6aa8",
+		storageBucket: "einkaufsliste-e6aa8.appspot.com",
+		messagingSenderId: "613130881509"
+	  };
+	  firebase.initializeApp(config);
+	  
+	  
+	  
+	  
+	 var dbRefObject = firebase.database().ref();
+	  
+		  //button function
+		function onClick(){
+			//variable für den Text
+			var name = document.getElementById("name");
+			//variable für den Button
+			var button = document.getElementById("button");
+			//variable zum root Objekt der Datenbank
+			var firebaseRef = firebase.database().ref();
+			//variable für das text value
+			var messageText = name.value;
+			//push da man mit .child immer sein vorher erstelltes überschreibt
+			//erstellt einen neuen Datensatz mit einer random id und dem Text 
+			var insert = firebaseRef.child('Einkauf');
+			
+			insert.push(messageText);
+		}	
+	
+	
+	
+	
+
+	
+	
+</script>
+	
+	<h1>Einkaufsliste</h1>
+	
+	<ul id="List"></ul>
+	<input type="text" id="name">
+	<input type="button" id="Liste" value="Hinzufuegen" onclick="onClick()">
+	
+	
+<script>
+var dbRefObject = firebase.database().ref();
+	
+var ulList = document.getElementById("List"); 
+		
+var dbRefListe = dbRefObject.child("Einkauf");
+
+//auflisten aller Datensätze beim Aufrufen der Seite und aktualisierung beim einfügen eines neuen Datensatzes
+//oder beim aktualisieren der Seite
+dbRefListe.on('child_added', snap => {
+	var li = document.createElement('li');
+	li.innerText = snap.val();
+	li.id = snap.key;
+	ulList.appendChild(li);
+});
+//changen der Einkäufe in der Einkaufsliste änderung geht nur über die Datenbank wird aber im Browser aktualisiert
+dbRefListe.on('child_changed', snap => {
+	var liChanged = document.getElementById(snap.key);
+	liChanged.innerText = snap.val();
+
+});
+
+//removen der Einkäufe in der Einkaufsliste änderung geht nur über die Datenbank wird aber im Browser aktualisiert
+dbRefListe.on('child_removed', snap => {
+	var liRemove = document.getElementById(snap.key);
+	liToRemove.remove();
+
+});
+	
+	
+	
+</script>	
+	
+	
+
+</body>
+</html>
